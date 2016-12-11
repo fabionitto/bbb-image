@@ -4,19 +4,19 @@ MAINTAINER Fabio Nitto <fabio.nitto@gmail.com>
 RUN update-locale LANG=en_US.UTF-8 && dpkg-reconfigure locales
 
 #Install build packages - compile ffmpeg
-RUN apt-get -y update && apt-get install -y \\
-    build-essential \\
-    git-core \\
-    checkinstall \\
-    yasm \\
-    texi2html \\
-    libvorbis-dev \\
-    libx11-dev \\
-    libvpx-dev \\
-    libxfixes-dev \\
-    zlib1g-dev \\
-    pkg-config \\
-    netcat \\
+RUN apt-get -y update && apt-get install -y \
+    build-essential \
+    git-core \
+    checkinstall \
+    yasm \
+    texi2html \
+    libvorbis-dev \
+    libx11-dev \
+    libvpx-dev \
+    libxfixes-dev \
+    zlib1g-dev \
+    pkg-config \
+    netcat \
     libncurses5-dev
     
 #Purge build packages
@@ -32,13 +32,13 @@ RUN echo "deb http://us.archive.ubuntu.com/ubuntu/ trusty multiverse" | tee -a /
 RUN apt-add-repository ppa:libreoffice/libreoffice-4-4
 
 #Install required packages
-RUN apt-get -y update && apt-get install -y --allow-unauthenticated \\
-    bigbluebutton \\
-    bbb-demo \\
-    bbb-check \\
-    libreoffice-common \\
-    libreoffice \\
-    supervisor  \\
+RUN apt-get -y update && apt-get install -y --allow-unauthenticated \
+    bigbluebutton \
+    bbb-demo \
+    bbb-check \
+    libreoffice-common \
+    libreoffice \
+    supervisor  \
     software-properties-common
 
 
