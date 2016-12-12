@@ -1,50 +1,61 @@
 FROM ubuntu:14.04
 MAINTAINER Fabio Nitto <fabio.nitto@gmail.com>
 
-RUN update-locale LANG=en_US.UTF-8 && dpkg-reconfigure locales
-
-#Install build packages - compile ffmpeg
-RUN apt-get -y update && apt-get install -y \
+ENV FFMPEG_VERSION 2.3.3
+ENV BUILD_PACKAGES \
     build-essential \
-    git-core \
     checkinstall \
-    yasm \
-    texi2html \
+    git-core \
+    libncurses5-dev \
     libvorbis-dev \
-    libx11-dev \
     libvpx-dev \
+    libx11-dev \
     libxfixes-dev \
-    zlib1g-dev \
-    pkg-config \
     netcat \
-    libncurses5-dev
-    
-#Purge build packages
-
-# Add bbb keys and repos
-RUN wget http://ubuntu.bigbluebutton.org/bigbluebutton.asc -O- | sudo apt-key add - && \
-    echo "deb http://ubuntu.bigbluebutton.org/trusty-1-0/ bigbluebutton-trusty main" | sudo tee /etc/apt/sources.list.d/bigbluebutton.list
+    pkg-config \
+    texi2html \
+    yasm \
+    zlib1g-dev
 
 #Add multiverse repo
 RUN echo "deb http://us.archive.ubuntu.com/ubuntu/ trusty multiverse" | tee -a /etc/apt/sources.list
 
 #Add LibreOffice 4.4 repo
-RUN apt-add-repository ppa:libreoffice/libreoffice-4-4
+RUN apt-get -y update && apt-get install -y \
+    software-properties-common && \
+    apt-add-repository ppa:libreoffice/libreoffice-4-4 
+
+# Add bbb keys and repos
+RUN apt-get -y update && apt-get install -y wget && \
+    wget http://ubuntu.bigbluebutton.org/bigbluebutton.asc -O- | sudo apt-key add - && \
+    echo "deb http://ubuntu.bigbluebutton.org/trusty-1-0/ bigbluebutton-trusty main" | sudo tee /etc/apt/sources.list.d/bigbluebutton.list
+
+#Install build packages - compile ffmpeg
+RUN apt-get -y update && apt-get install -y \
+    $BUILD_PACKAGES &&  \
+    cd /usr/local/src && \
+    wget "http://ffmpeg.org/releases/ffmpeg-${FFMPEG_VERSION}.tar.bz2" && \
+    tar -xjf "ffmpeg-${FFMPEG_VERSION}.tar.bz2" && \
+    cd "ffmpeg-${FFMPEG_VERSION}" && \
+    sudo ./configure --enable-version3 --enable-postproc --enable-libvorbis --enable-libvpx && \
+    sudo make && \
+    sudo checkinstall --pkgname=ffmpeg --pkgversion="5:${FFMPEG_VERSION}" --backup=no --deldoc=yes --default
+    #&& \
+    #AUTO_ADDED_PACKAGES=`apt-mark showauto` && \
+    #apt-get remove --purge -y $BUILD_PACKAGES $AUTO_ADDED_PACKAGES
 
 #Install required packages
-RUN apt-get -y update && apt-get install -y --allow-unauthenticated \
+RUN apt-get -y update && apt-get install -y  \
     bigbluebutton \
-    bbb-demo \
-    bbb-check \
-    libreoffice-common \
-    libreoffice \
-    supervisor  \
-    software-properties-common
+    supervisor
 
+#RUN apt-get -y update && apt-get install -y \
+#    bbb-check \
+#    bbb-demo
 
 #COPY ImageMagick Security policy updated
 
-COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+#COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 EXPOSE 80 443
 CMD ["/usr/bin/supervisord"]
