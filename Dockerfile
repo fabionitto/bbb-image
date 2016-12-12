@@ -45,7 +45,8 @@ RUN apt-get -y update && apt-get install -y \
     #apt-get remove --purge -y $BUILD_PACKAGES $AUTO_ADDED_PACKAGES
 
 #Install required packages
-RUN apt-get -y update && apt-get install -y  \
+RUN add-apt-repository -y ppa:ondrej/php && \
+    apt-get -y update && apt-get install -y  \
     bigbluebutton \
     supervisor
 
