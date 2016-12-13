@@ -22,8 +22,12 @@ RUN echo "deb http://us.archive.ubuntu.com/ubuntu/ trusty multiverse" | tee -a /
 
 #Add LibreOffice 4.4 repo
 RUN apt-get -y update && apt-get install -y \
-    software-properties-common && \
-    apt-add-repository ppa:libreoffice/libreoffice-4-4 
+    software-properties-common \
+    language-pack-en-base && \
+    export LC_ALL=en_US.UTF-8 && \
+    export LANG=en_US.UTF-8 && \
+    apt-add-repository ppa:libreoffice/libreoffice-4-4 && \
+    apt-add-repository -y ppa:ondrej/php 
 
 # Add bbb keys and repos
 RUN apt-get -y update && apt-get install -y wget && \
@@ -45,8 +49,7 @@ RUN apt-get -y update && apt-get install -y \
     #apt-get remove --purge -y $BUILD_PACKAGES $AUTO_ADDED_PACKAGES
 
 #Install required packages
-RUN add-apt-repository -y ppa:ondrej/php && \
-    apt-get -y update && apt-get install -y  \
+RUN apt-get -y update && apt-get install -y  \
     bigbluebutton \
     supervisor
 
