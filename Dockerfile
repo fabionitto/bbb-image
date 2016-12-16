@@ -48,6 +48,12 @@ RUN apt-get -y update && apt-get install -y \
     #AUTO_ADDED_PACKAGES=`apt-mark showauto` && \
     #apt-get remove --purge -y $BUILD_PACKAGES $AUTO_ADDED_PACKAGES
 
+#Install Tomcat7 and setting custom init.d script
+RUN apt-get -y update && apt-get install -y  \
+    tomcat7
+
+COPY tomcat7 /etc/init.d/tomcat7
+
 #Install required packages
 RUN apt-get -y update && apt-get install -y  \
     bigbluebutton \
