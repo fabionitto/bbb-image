@@ -59,13 +59,16 @@ RUN apt-get -y update && apt-get install -y  \
     bigbluebutton \
     supervisor
 
-#RUN apt-get -y update && apt-get install -y \
-#    bbb-check \
-#    bbb-demo
+RUN apt-get -y update && apt-get install -y \
+    bbb-check \
+    bbb-demo \
+    bbb-apps-akka \
+    bbb-fsesl-akka
 
-#COPY ImageMagick Security policy updated
+# ImageMagick Security Policy OK
 
-#COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+COPY start.sh /usr/bin/start.sh
 
-EXPOSE 80 443
-CMD ["/usr/bin/supervisord"]
+EXPOSE 80 443 1935 9123
+CMD ["/usr/bin/start.sh"]
