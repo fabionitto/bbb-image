@@ -70,5 +70,5 @@ COPY start.sh /usr/bin/start.sh
 
 RUN bbb-conf --enablewebrtc
 
-EXPOSE 80 443 1935 9123
+EXPOSE 80 443 1935 5066 9123
 CMD ["/usr/bin/start.sh"]
