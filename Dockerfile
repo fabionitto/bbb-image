@@ -61,9 +61,7 @@ RUN apt-get -y update && apt-get install -y  \
 
 RUN apt-get -y update && apt-get install -y \
     bbb-check \
-    bbb-demo \
-    bbb-apps-akka \
-    bbb-fsesl-akka
+    bbb-demo
 
 # ImageMagick Security Policy OK
 
