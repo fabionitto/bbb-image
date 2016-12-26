@@ -5,7 +5,7 @@ function get_ip (){
 }
 
 function get_ext_ip (){
-    if [ ! -z "$EXTIP"]; then
+    if [ ! -z "$EXTIP" ]; then
       echo $EXTIP $URL >> /etc/hosts
       echo $EXTIP
     else
